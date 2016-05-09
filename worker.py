@@ -45,6 +45,7 @@ def check_lock(lock, priority):
             sleep(3)
         lock.acquire()
 
+
 def do_work(job_type, job_str, priority, prev_priority, worker, lock):
     lock.acquire()         
     packet = json.loads(job_str)
@@ -69,7 +70,9 @@ def do_work(job_type, job_str, priority, prev_priority, worker, lock):
 
 """
 Takes a list of queues in priority order and a callable function worker which takes an arbitrary python dict 
-of arguments
+of arguments (known as a work packet), a job type (based on the name of the queue the work packet was pulled from),
+a lock pointer and a job priority to be used in the check_lock function to cede control to any higher priority jobs
+that are queued up on this worker, and returns a python object result.
 """
 def get_work(queues, worker):
     current_priority = queues.length

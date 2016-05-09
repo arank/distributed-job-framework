@@ -8,12 +8,12 @@ import sys
 import os
 import MySQLdb
 import json
-import traceback
+import util
 
 MAX_SQL_TRIES = 5
 
 QUEUE_REFRESH = 50
-MAX_IN_QUEUE = 500
+MAX_IN_QUEUE = 100
 
 MAX_POLL_TIME = 3600
 
@@ -59,6 +59,15 @@ def pull_job_id(db, job_id):
         return row
     return None
 
+# Pulls all expired jobs
+def get_expired_job(db, time_limit):
+    cur = db.cursor()
+    cur.execute("SELECT * FROM jobs WHERE checkout_time < \'"+str(time.time()-time_limit)+"\';")
+    row = cur.fetchone()
+    if row is not None:
+        return row
+    return None
+
 # Updates a completed job into the database
 def push_job_stats(db, checkin_time, process_time, job_id):
     cur = db.cursor()
@@ -77,6 +86,7 @@ queue_list = []
 complete_job_str = None
 db = connect_to_sql()
 
+""""""
 def add_new_jobs(checkout_job_packet):
     # Update queues with new jobs if the workers have cleared jobs below the threshold
     for index, queue in enumerate(queue_list):
