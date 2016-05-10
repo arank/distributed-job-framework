@@ -4,7 +4,7 @@ POOL = redis.ConnectionPool(host='104.196.119.85', port=6379, db=0)
 r = redis.Redis(connection_pool=POOL)
 
 class Queue(object):
-    """An abstract FIFO queue"""
+    """An abstract FIFO queue based on redis"""
     def __init__(self, queue_name=None):
         #create new queue
         if queue_name is None:
