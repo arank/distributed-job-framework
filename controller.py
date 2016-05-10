@@ -45,7 +45,7 @@ def connect_to_sql(max_tries = MAX_SQL_TRIES):
 """ Given a database connection object generates and returns a new job_id checkout at the current time in the database"""
 def get_job_id(db):
     cur = db.cursor()
-    cur.execute("INSERT INTO jobs (checkout_time) VALUES (\'"+str(time.time())+"\');")
+    cur.execute("INSERT INTO scrapes (checkout_time) VALUES (\'"+str(time.time())+"\');")
     return cur.lastrowid
 
 """ 
@@ -54,12 +54,12 @@ Given a database connection object and job id, removes job id from the database 
 """
 def kill_job_id(db, job_id):
     cur = db.cursor()
-    cur.execute("DELETE FROM jobs WHERE job_id = \'"+str(job_id)+"\';")
+    cur.execute("DELETE FROM scrapes WHERE scrape_id = \'"+str(job_id)+"\';")
     db.commit()
 
 "Given a database connection object and job id, pulls the existing job and all its data from the database, returning None if not found"
 def pull_job_id(db, job_id):
-    cur.execute("SELECT * FROM jobs WHERE job_id = \'"+str(job_id)+"\';")
+    cur.execute("SELECT * FROM scrapes WHERE scrape_id = \'"+str(job_id)+"\';")
     row = cur.fetchone()
     if row is not None:
         return row
@@ -71,7 +71,7 @@ return a list with the specific job id and checkout time or none if there are no
 """
 def get_expired_job(db, time_limit):
     cur = db.cursor()
-    cur.execute("SELECT * FROM jobs WHERE checkin_time = NULL AND checkout_time < \'"+str(time.time()-time_limit)+"\';")
+    cur.execute("SELECT * FROM scrapes WHERE checkin_time = NULL AND checkout_time < \'"+str(time.time()-time_limit)+"\';")
     row = cur.fetchone()
     if row is not None:
         return row
@@ -88,10 +88,10 @@ def push_job_stats(db, checkin_time, process_time, job_id):
     db.commit()
 
 # The queue for errors from jobs
-error_queue =  Queue('err_t')
+error_queue =  util.Queue('err_t')
 
 # The queue of completed jobs
-complete_queue = Queue('comp_t')
+complete_queue = util.Queue('comp_t')
 
 # The database object to hold for SQL connection
 db = connect_to_sql()

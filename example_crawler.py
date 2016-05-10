@@ -26,4 +26,4 @@ def job(arguments, job_type, lock, priority):
 queues = [util.Queue("math"), util.Queue("url")]
 
 # Start polling the queues for work packets and doing jobs
-get_work(queues, job)
+worker.get_work(queues, job)

@@ -8,7 +8,7 @@ import util
 current_priority = None
 
 # The queue of complete jobs
-complete_queue = Queue('comp_t')
+complete_queue = util.Queue('comp_t')
 
 # The maximum time to wait to poll for a new job
 MAX_POLL_TIME = 3600
@@ -83,7 +83,7 @@ a lock pointer and a job priority to be used in the check_lock function to cede 
 that are queued up on this worker, and returns a python object result.
 """
 def get_work(queues, worker):
-    current_priority = queues.length
+    current_priority = len(queues)
     lock = threading.Lock()
 
     # keep looking for new, higher priority work packets

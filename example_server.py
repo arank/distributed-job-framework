@@ -1,4 +1,5 @@
 import controller
+import time
 import util
 
 # Urls and math problems to solve
@@ -18,7 +19,7 @@ def checkout_packet(job_id, job_type):
 	if job_type == "math":
 		res = math.pop()
 		to_ret = {"math": res} 
-	elif job_type = "url":
+	elif job_type == "url":
 		res =  urls.pop()
 		to_ret = {"url": res}
 	if res is not None:
@@ -40,8 +41,8 @@ queues = [util.Queue("math"), util.Queue("url")]
 while True:
 	# adds new jobs to any empty queues using the checkout packet fucntion
 	controller.add_new_jobs(checkout_packet, queues)
-	sleep(10)
+	time.sleep(10)
 	# processes up to 5 complete jobs using the process job results function
 	controller.process_complete_jobs(5, process_job_results)
-	sleep(10)
+	time.sleep(10)
 
