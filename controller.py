@@ -1,11 +1,5 @@
 import redis
-import urllib2
 import time
-import random
-import numpy as np
-import math
-import sys
-import os
 import MySQLdb
 import json
 import util
@@ -20,10 +14,10 @@ QUEUE_REFRESH = 50
 MAX_IN_QUEUE = 100
 
 # SQL Database connection info
-DB_HOST= "173.194.230.42"
-DB_USER = "controller"
-DB_PASS = "toor"
-DB_NAME = "venmo"
+DB_HOST= "169.192.1.1"
+DB_USER = "test"
+DB_PASS = "test"
+DB_NAME = "test"
 
 
 ''' SQL Functions to connect to SQL backend that holds job state returning none if no connection is available'''
